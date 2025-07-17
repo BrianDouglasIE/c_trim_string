@@ -4,19 +4,27 @@
 #include <ctype.h>
 #include <stdlib.h>
 
+char *empty_string()
+{
+  char *str = malloc(1);
+  if(!str) return nullptr;
+  str[0] = '\0';
+  return str;
+}
+
 char *ltrim_string(char *str)
 {
   if(!str) return nullptr;
 
   size_t len = strlen(str);
-  if(!len) return nullptr;
+  if(!len) return empty_string();
 
   size_t start = 0;
   while(start < len && isspace(str[start])) start++;
 
-  if(start >= len) return nullptr;
+  if(start >= len) return empty_string();
 
-  size_t new_size = len - start + 1;
+  size_t new_size = len - start;
   char *result = malloc(new_size);
   if (!result) return nullptr;
 
@@ -31,12 +39,12 @@ char *rtrim_string(char *str)
   if(!str) return nullptr;
 
   size_t len = strlen(str);
-  if(!len) return nullptr;
+  if(!len) return empty_string();
 
   size_t end = len - 1;
   while(end && isspace(str[end])) end--;
 
-  if(0 >= end) return nullptr;
+  if(0 >= end) return empty_string();
 
   size_t new_size = end + 1;
   char *result = malloc(new_size + 1);
@@ -91,6 +99,25 @@ int main(void)
   test_str = trim_string("\r\nhello\n");
   assert(test_str && 0 == strcmp("hello", test_str));
   free(test_str);
+
+  // empty strings
+  test_str = ltrim_string("    ");
+  assert(test_str && 0 == strcmp("", test_str));
+  free(test_str);
+
+  test_str = rtrim_string("    ");
+  assert(test_str && 0 == strcmp("", test_str));
+  free(test_str);
+
+  test_str = trim_string("    ");
+  assert(test_str && 0 == strcmp("", test_str));
+  free(test_str);
+
+  test_str = trim_string("");
+  assert(test_str && 0 == strcmp("", test_str));
+  free(test_str);
+
+  assert(trim_string(nullptr) == nullptr);
 
   return 0;
 }
