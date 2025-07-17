@@ -17,7 +17,7 @@ char *ltrim_string(char *str)
   if(start >= len) return nullptr;
 
   size_t new_size = len - start + 1;
-  char *result = malloc(new_size + 1);
+  char *result = malloc(new_size);
   if (!result) return nullptr;
 
   memcpy(result, str + start, new_size);
